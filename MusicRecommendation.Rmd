@@ -1,0 +1,87 @@
+---
+title: "Algoritmo para el descubrimiento de musica basada en listas de reproducciones"
+output: html_document
+date: "2024-06-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Resumen
+
+[Spotiy](https://spotify.com) es un servicio en linea de musica, con mas de 140 millones de usuarios activos alrededor del mundo y mas de 20 millones de canciones. Ademas de lo anterior el servicio cuenta con mas de 2 billones de listas de reproduccion a diciembre de 2018.
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Limpieza de los datos
+```{r dataprep}
+library(jsonlite)
+library(dplyr)
+library(magrittr)
+library(jsonlite)
+library(tidyr)
+
+files <- list.files(path = "./datasets/spotify_millions_playlist", full.names = TRUE)
+
+#n <- 1
+t <- fromJSON(files[1])
+
+# for playlist
+
+tr$
+#write.csv(tr, "data/tracks.csv", row.names = FALSE, quote = FALSE)
+
+
+#t$playlists
+
+d <- t$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
+tr <- do.call("rbind", t$playlists[]$tracks) %>% select(-c("pos"))
+
+
+# Crearemos dos archivos para sus respectivos analisis estadistico. El primer archivo es la lista de listas de reproduccion, mientras que el segundo es la lista de canciones encontradas en las listas de reproduccion.
+for (f in files[-1]) {
+  n <- n + 1
+  i <- fromJSON(f)
+  
+  j = i$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
+  
+  d <- rbind(d, j)
+  tr <- rbind(tr, i$playlists$tracks %>% mutate(id = n))
+}
+
+#View(tr)
+#tr <- t$playlists$tracks %>% mutate(id = n)
+
+#str(t)
+# d <- t %>% select(c("playlists"))
+# View(d)
+#View(t$playlists)
+
+write.csv(d, "data/playlists.csv", row.names = FALSE, quote = FALSE)
+write.csv(tr, "data/tracks", row.names = FALSE, quote = FALSE)
+
+#t$playlists$tracks[1]
+#as.data.frame(unlist(t$playlists$tracks))
+#unlist(t$playlists$tracks)
+
+#mpd <- lapply(files, fromJSON)
+#df <- rbind_pages(mdp)
+```
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
