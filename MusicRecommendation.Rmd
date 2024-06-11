@@ -1,57 +1,115 @@
 ---
-title: "Algoritmo para el descubrimiento de musica basada en listas de reproducciones"
-output: html_document
+title: "Recomendación de canciones basada en listas de reproducción para plataformas música en linea."
 date: "2024-06-07"
+author:
+  - Javier Eduardo Jaimes Velasquez^[Politécnico Grancolombiano, jajaimes4@poligran.edu.co]
+  - Paula Nathalia Pineda Ortiz^[Politécnico Grancolombiano, papineda1@poligran.edu.co]
+  - Brandon Valencia Murillo^[Politécnico Grancolombiano, brvalencia6@poligran.edu.co]
+  - Johan Alejandro Cifuentes Gonzalez^[Politécnico Grancolombiano, jcifuntes@poligran.edu.co]
+  - Melvin Damar Pineda Cañon^[Politécnico Grancolombiano, mdpineda1@poligran.edu.co]
+bibliography: bib.bib
+always_allow_html: true
+abstract: |
+  Aqui viene el abstract
+output:  
+  bookdown::word_document2:
+    toc: true
+    number_sections: true
+    reference_docx: "plantilla_LF.docx"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, dpi=2000,warning=F, message = F,comment = "")
 ```
 
-## Resumen
 
-[Spotiy](https://spotify.com) es un servicio en linea de musica, con mas de 140 millones de usuarios activos alrededor del mundo y mas de 20 millones de canciones. Ademas de lo anterior el servicio cuenta con mas de 2 billones de listas de reproduccion a diciembre de 2018.
+# Introducción
+
+[Spotiy](https://spotify.com) es un servicio en linea de musica, con mas de 140 millones de usuarios activos alrededor del mundo y mas de 20 millones de canciones. Ademas de lo anterior el servicio cuenta con mas de 2 billones de listas de reproduccion a diciembre de 2018. A pesar de eso una de sus funcionalidad principal
 
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-## Limpieza de los datos
-```{r dataprep}
+# Descripcion del Conjunto de Datos
+
+Se obtiene acceso al conjunto de datos principal [Million Playlist Dataset](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge) publicado por Spotify en la plataforma [AI Crowd](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge). A partir de la fuente original tomamos como referencia una muestra de 1000, en las que aleatoriamente se escogieron 100. 
+
+
+```{r dataprep, eval=FALSE}
 library(jsonlite)
 library(dplyr)
 library(magrittr)
 library(jsonlite)
 library(tidyr)
+library(spotifyr)
 
-files <- list.files(path = "./datasets/spotify_millions_playlist", full.names = TRUE)
+Sys.setenv(SPOTIFY_CLIENT_ID = "cf91febd27b84f08baa8c5053f9d8f2e")
+Sys.setenv(SPOTIFY_CLIENT_SECRET = "f16c1e86e1d8462384a5def0f0fddab4")
 
-#n <- 1
-t <- fromJSON(files[1])
+# Archivo original de spotify
+t <- fromJSON("datasets/spotify_millions_playlist/mpd.slice.0-999.json")
 
-# for playlist
+# list of playlist
+d <- t$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers", "tracks"))
 
-tr$
-#write.csv(tr, "data/tracks.csv", row.names = FALSE, quote = FALSE)
+# Se toma como muestra 100 lista de reproducciones.
+set.seed(100)
+srow <- sample(1:nrow(d), 100)
+
+p <- d[srow, ]
+tr <- do.call("rbind", p$tracks) %>% select(-c("pos")) %>% distinct()
 
 
-#t$playlists
+#load spotify metadata info
+access_token <- get_spotify_access_token()
 
-d <- t$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
-tr <- do.call("rbind", t$playlists[]$tracks) %>% select(-c("pos"))
+spotify_track_uris <- as.list(tr$track_uri) 
+spotify_tracks_ids <- lapply(spotify_track_uris, function(x) strsplit(x, ":")[[1]][3])
+spotify_tracks_id_by_100 <- split(spotify_tracks_ids, ceiling(seq_along(spotify_tracks_ids) / 100))
 
+audio_features_by_ids <- get_track_audio_features(gsub(" ", "", toString(spotify_tracks_id_by_100[1][[1]])))
+
+for (i in 2:length(spotify_tracks_id_by_100)) {
+  cat("---")
+  
+  audio_features_by_ids <- rbind(audio_features_by_ids, get_track_audio_features(gsub(" ", "", toString(spotify_tracks_id_by_100[i][[1]]))))
+  
+  Sys.sleep(1)
+}
+
+
+trf <- left_join(x = tr, y = audio_features_by_ids, by = c("track_uri" = "uri")) %>% na.omit()
+
+#extract_id <- function(l) {
+#  parts <- strsplit(l, ":")
+#  return(parts[[1]][3])
+#}
+
+#spotify_tracks_ids <- sapply(spotify_track_uris, extract_id)
+
+
+
+#ids <- paste(spotify_tracks_id_by_100[1], collapse = NULL)
+#tra <- left_join(x = tracks, y = egresos_clientes, by = c("id" = "id2")) %>% na.omit()
+
+# "xyz,yz"
+
+#tr <- unique(tr$track_name)
 
 # Crearemos dos archivos para sus respectivos analisis estadistico. El primer archivo es la lista de listas de reproduccion, mientras que el segundo es la lista de canciones encontradas en las listas de reproduccion.
-for (f in files[-1]) {
-  n <- n + 1
-  i <- fromJSON(f)
+#for (f in files[-1]) {
+#  i <- fromJSON(f)
   
-  j = i$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
+#  # Join the playlists to the original d dataframe
+#  j = i$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
+#  d <- rbind(d, j)
   
-  d <- rbind(d, j)
-  tr <- rbind(tr, i$playlists$tracks %>% mutate(id = n))
-}
+  # Join tracks to the tr dataframe
+#  jtr <- do.call("rbind", t$playlists[]$tracks) %>% select(-c("pos"))
+#  tr <- rbind(tr, jtr)
+#}
 
 #View(tr)
 #tr <- t$playlists$tracks %>% mutate(id = n)
@@ -61,8 +119,15 @@ for (f in files[-1]) {
 # View(d)
 #View(t$playlists)
 
-write.csv(d, "data/playlists.csv", row.names = FALSE, quote = FALSE)
-write.csv(tr, "data/tracks", row.names = FALSE, quote = FALSE)
+pj <- toJSON(p, auto_unbox = TRUE)
+write_json(pj, path = "data/playlist.json")
+
+pf <- p %>% select(-c("tracks"))
+
+write.csv(pf, "data/playlists.csv", row.names = FALSE, quote = FALSE)
+write.csv(trf, "data/tracks.csv", row.names = FALSE, quote = FALSE)
+
+# Loading 
 
 #t$playlists$tracks[1]
 #as.data.frame(unlist(t$playlists$tracks))
@@ -72,8 +137,118 @@ write.csv(tr, "data/tracks", row.names = FALSE, quote = FALSE)
 #df <- rbind_pages(mdp)
 ```
 
-```{r cars}
-summary(cars)
+A partir de la muestra se construyen los siguientes conjuntos de datos, con information que se obtiene a traves de la integracion de la API de Spotify.
+
+## Lista de Reproducciones
+
+La lista de reproduccion tiene la siguiente estructura:
+
+| Nombre del campo | Tipo del Campo | Descripción
+|:-----------------|:---------------|:-----------
+|Name |Caracteres |Nombre de la lista de reproduccion
+|Collaborative | Logico | Describe si la lista de reproduccion es publica o privada.
+|pid |Entero |Identificador unico de la lista de reproduccion
+|modified_at |Entero |Tiempo | Fecha y hora de su modificacion
+|num_tracks |Entero |Numero de canciones en la lista de reproduccion.
+|num_albums |Entero |Numero de albumes en la lista de reproduccion
+|num_followers |Entero |Numero de seguidores de la lista de reproduccion.
+
+
+### Canciones
+
+Cada lista de reproduccion contiene un numero $n$ de canciones con la siguiente estructura.
+
+| Nombre del campo | Tipo del Campo | Descripción
+|:-----------------|:---------------|:-----------
+|artist_name |Caracteres |Nombre del artista
+|track_uri |Caracteres |Identificador unico de cancion
+|artist_uri |Caracteres |Identificador unico de artista
+|track_name |Caracteres |Nombre de la cancion
+|album_uri |Caracteres |Identificador unico del album
+|duration_ms.x |Caracteres |Duracion de la cancion en ms.
+|album_name |Caracteres |Nombre del album
+|danceablity |Real |Describe el atributo de baile de una cancion.
+|energy |Real |Describe en terminos de intensidad y actividad una cancion.
+|loudness |Real |Describe el volumen de la cancion.
+|speechiness |Real |Describe la presencia de palabras en una cancion
+|acousticness |Real |Describe si una cancion es acustica.
+|instrumentalness |Real |Describe si una cancion no contiene voces.
+|liveness |Real |Describe si hay presencia de audiencia en una cancion.
+|tempo |Real |Describe el actual BPM de una cancion.
+
+
+
+## Estadisticas descriptivas del conjunnto de datos
+
+```{r}
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+library(magrittr)
+library(ggplot2)
+library(dplyr)
+library(flextable)
+
+playlists <- read.csv("data/playlists.csv")
+
+playlists_by_group <- playlists %>% group_by(collaborative) %>% summarise(mnum_tracks=mean(num_tracks))
+#playlists_by_group %>%  ggplot( aes(x=collaborative, y=mnum_tracks, fill=collaborative)) + geom_boxplot()
+playlists %>%  ggplot( aes(x=collaborative, y=num_tracks, fill=collaborative)) + geom_boxplot()
+
+#table <- playlists %>% group_by(collaborative) %>% summarise(mean_num_tracks=mean(num_tracks), mean_num_albums=mean(num_albums), sd_num_tracks=sd(num_tracks), sd_num_albums=sd(num_albums), total_tracks=sum(num_tracks), total_albums=sum(num_albums))
+
+#flextable(table) %>% theme_vanilla()
+
+# Se clona la lista de canciones (playlist) para propositos de visualizacion
+data_summary <- playlists[, c("collaborative", "num_tracks", "num_albums", "num_followers")]
+data_summary$collaborative <- ifelse(data_summary$collaborative, "Public", "Private")
+summary <- data_summary %>% summarizor(by = c("collaborative"), overall_label = "Total") 
+summary_table <- summary %>% as_flextable(spread_first_col = TRUE)
+#set_
+#sumarizor_table <- set_header_labels(summary_table, values = list(
+#  collaborative: "Public/Private"
+#))
+summary_table
+```
+# Histograma de frecuencia por Numero de Canciones
+
+```{r}
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+library(magrittr)
+library(ggplot2)
+library(dplyr)
+
+playlists <- read.csv("data/playlists.csv")
+
+playlists %>% ggplot( aes(x=num_albums, fill=collaborative)) + geom_histogram( color="#e9ecef", alpha=0.6, position = 'identity') + scale_fill_manual(values=c("#69b3a2", "#404080")) + theme_ipsum() + labs(fill="")
+```
+## El Artista Mas Escuchado
+```{r}
+library(wordcloud2)
+library(readr)
+library(magrittr)
+library(dplyr)
+
+dtracks <- read_csv("data/tracks.csv")
+wc_tracks <- dtracks %>% group_by(artist_name) %>% summarise(n = n_distinct(track_uri))
+
+wordcloud2(data = wc_tracks, size = 2)
+```
+
+# La cancion mas escuchada
+
+```{r}
+library(wordcloud2)
+library(readr)
+library(magrittr)
+library(dplyr)
+
+dtracks <- read_csv("data/tracks.csv")
+wc_tracks <- dtracks %>% group_by(album_name) %>% summarise(n = n_distinct(track_uri))
+
+wordcloud2(data = wc_tracks, size = 2)
 ```
 
 ## Including Plots
