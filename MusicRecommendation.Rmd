@@ -1,5 +1,5 @@
 ---
-title: "Recomendación de canciones basada en listas de reproducción para plataformas música en linea."
+title: "Selección automática de la siguiente canción, basada en las listas de reproducción del servicio de música en línea: Spotify."
 date: "2024-06-07"
 author:
   - Javier Eduardo Jaimes Velasquez^[Politécnico Grancolombiano, jajaimes4@poligran.edu.co]
@@ -7,10 +7,10 @@ author:
   - Brandon Valencia Murillo^[Politécnico Grancolombiano, brvalencia6@poligran.edu.co]
   - Johan Alejandro Cifuentes Gonzalez^[Politécnico Grancolombiano, jcifuntes@poligran.edu.co]
   - Melvin Damar Pineda Cañon^[Politécnico Grancolombiano, mdpineda1@poligran.edu.co]
-bibliography: bib.bib
+bibliography: references.bib
 always_allow_html: true
 abstract: |
-  Aqui viene el abstract
+  Las plataformas de música en línea deben emplear una forma eficiente y eficaz que resuelve uno de los problemas más críticos, recomendación de música automática. En este documento se explora uno de tantos métodos expuestos en la actualidad para resolver la tarea. Se espera poder evaluar su funcionamiento respecto a otros y también su efectividad a la hora de resolver el problema.
 output:  
   bookdown::word_document2:
     toc: true
@@ -25,17 +25,24 @@ knitr::opts_chunk$set(echo = TRUE, dpi=2000,warning=F, message = F,comment = "")
 
 # Introducción
 
-[Spotiy](https://spotify.com) es un servicio en linea de musica, con mas de 140 millones de usuarios activos alrededor del mundo y mas de 20 millones de canciones. Ademas de lo anterior el servicio cuenta con mas de 2 billones de listas de reproduccion a diciembre de 2018. A pesar de eso una de sus funcionalidad principal
+Las canciones se volvieron parte de cotidianidad, y por ellos los servicios de música en línea juegan un papel importante en la vida de cada ciudadano. Los consumidores de música ya no necesitan un dispositivo de propósito dedicado, como el radio. Ahora la música está disponible en una computadora, o en las manos a través de un smartphone.
+
+Las plataformas de música en línea abundan, de acuerdo con *@Wikipedia*, la variedad es extensa. Por ende, cada proveedor debe esforzarse en crear una experiencia única en un mercado abundado de opciones.
+
+Dichas plataformas están compuestas de muchas o tal vez cientos de funcionalidades, pero una en ella es clave: la recomendación automática de canciones. De ella depende la permanencia de muchos de sus clientes. La capacidad intrínseca del sistema de proveer de forma automática la siguiente canción es clave a la hora de hacer clientes felices. Como se menciona en *@7823674*: *“Un entendimiento profundo de los atributos de las listas de reproducción y como los usuarios crean y mantienen dichas listas puede contribuir de manera natural a mejores recomendaciones y personalizaciones”*.
+
+En este documento se espera poder responder la pregunta: ¿cuál es el método de selección de música automática que mejor contribuye a una mejor experiencia de los usuarios de la plataforma de música en la línea con foco en Spotify?
+
+En el artículo *@7866196*, se menciona diferentes enfoques que resuelven nuestra pregunta. Para el desarrollo de la pregunta en este documento se decidido elegir el enfoque basado en contenido. Si bien este método no es el más usado en sistemas de recomendación se espera que al menos pueda plantear una forma eficaz de resolver la pregunta.
 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Analisis Exploratorio de Datos
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Conjunto de Datos
 
-# Descripcion del Conjunto de Datos
+Se obtuvo acceso al conjunto de datos [Million Playlist Dataset](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge) publicado por Spotify en la plataforma de [AI Crowd](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge). A partir de la fuente original tomamos como referencia una muestra de 1000, en las que aleatoriamente se escogieron 100.
 
-Se obtiene acceso al conjunto de datos principal [Million Playlist Dataset](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge) publicado por Spotify en la plataforma [AI Crowd](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge). A partir de la fuente original tomamos como referencia una muestra de 1000, en las que aleatoriamente se escogieron 100. 
-
+Para una idea incial del conjunto de base se encuentra: datasets/spotify_millions_playlist/mpd.slice.0-999.json.
 
 ```{r dataprep, eval=FALSE}
 library(jsonlite)
@@ -57,12 +64,11 @@ d <- t$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "nu
 # Se toma como muestra 100 lista de reproducciones.
 set.seed(100)
 srow <- sample(1:nrow(d), 100)
-
 p <- d[srow, ]
 tr <- do.call("rbind", p$tracks) %>% select(-c("pos")) %>% distinct()
 
 
-#load spotify metadata info
+# Obtención de datos a través del API de Spotify
 access_token <- get_spotify_access_token()
 
 spotify_track_uris <- as.list(tr$track_uri) 
@@ -72,52 +78,11 @@ spotify_tracks_id_by_100 <- split(spotify_tracks_ids, ceiling(seq_along(spotify_
 audio_features_by_ids <- get_track_audio_features(gsub(" ", "", toString(spotify_tracks_id_by_100[1][[1]])))
 
 for (i in 2:length(spotify_tracks_id_by_100)) {
-  cat("---")
-  
   audio_features_by_ids <- rbind(audio_features_by_ids, get_track_audio_features(gsub(" ", "", toString(spotify_tracks_id_by_100[i][[1]]))))
-  
   Sys.sleep(1)
 }
 
-
 trf <- left_join(x = tr, y = audio_features_by_ids, by = c("track_uri" = "uri")) %>% na.omit()
-
-#extract_id <- function(l) {
-#  parts <- strsplit(l, ":")
-#  return(parts[[1]][3])
-#}
-
-#spotify_tracks_ids <- sapply(spotify_track_uris, extract_id)
-
-
-
-#ids <- paste(spotify_tracks_id_by_100[1], collapse = NULL)
-#tra <- left_join(x = tracks, y = egresos_clientes, by = c("id" = "id2")) %>% na.omit()
-
-# "xyz,yz"
-
-#tr <- unique(tr$track_name)
-
-# Crearemos dos archivos para sus respectivos analisis estadistico. El primer archivo es la lista de listas de reproduccion, mientras que el segundo es la lista de canciones encontradas en las listas de reproduccion.
-#for (f in files[-1]) {
-#  i <- fromJSON(f)
-  
-#  # Join the playlists to the original d dataframe
-#  j = i$playlists %>% select(c("name", "collaborative", "pid", "modified_at", "num_tracks", "num_albums", "num_followers"))
-#  d <- rbind(d, j)
-  
-  # Join tracks to the tr dataframe
-#  jtr <- do.call("rbind", t$playlists[]$tracks) %>% select(-c("pos"))
-#  tr <- rbind(tr, jtr)
-#}
-
-#View(tr)
-#tr <- t$playlists$tracks %>% mutate(id = n)
-
-#str(t)
-# d <- t %>% select(c("playlists"))
-# View(d)
-#View(t$playlists)
 
 pj <- toJSON(p, auto_unbox = TRUE)
 write_json(pj, path = "data/playlist.json")
@@ -126,20 +91,11 @@ pf <- p %>% select(-c("tracks"))
 
 write.csv(pf, "data/playlists.csv", row.names = FALSE, quote = FALSE)
 write.csv(trf, "data/tracks.csv", row.names = FALSE, quote = FALSE)
-
-# Loading 
-
-#t$playlists$tracks[1]
-#as.data.frame(unlist(t$playlists$tracks))
-#unlist(t$playlists$tracks)
-
-#mpd <- lapply(files, fromJSON)
-#df <- rbind_pages(mdp)
 ```
 
-A partir de la muestra se construyen los siguientes conjuntos de datos, con information que se obtiene a traves de la integracion de la API de Spotify.
+A partir de la muestra se construyen los siguientes conjuntos de datos, con information obtenida a traves del [API de Spotify](https://developers.spotify.com).
 
-## Lista de Reproducciones
+### Lista de Reproducciones
 
 La lista de reproduccion tiene la siguiente estructura:
 
@@ -177,8 +133,12 @@ Cada lista de reproduccion contiene un numero $n$ de canciones con la siguiente 
 |tempo |Real |Describe el actual BPM de una cancion.
 
 
+## Estadisticas descriptivas
 
-## Estadisticas descriptivas del conjunnto de datos
+A continuacion se presentan los primeros resultados de nuestro analisis exploratorio inicial.
+
+### Tabla Lista de Reproducciones.
+
 
 ```{r}
 library(tidyverse)
@@ -195,22 +155,15 @@ playlists_by_group <- playlists %>% group_by(collaborative) %>% summarise(mnum_t
 #playlists_by_group %>%  ggplot( aes(x=collaborative, y=mnum_tracks, fill=collaborative)) + geom_boxplot()
 playlists %>%  ggplot( aes(x=collaborative, y=num_tracks, fill=collaborative)) + geom_boxplot()
 
-#table <- playlists %>% group_by(collaborative) %>% summarise(mean_num_tracks=mean(num_tracks), mean_num_albums=mean(num_albums), sd_num_tracks=sd(num_tracks), sd_num_albums=sd(num_albums), total_tracks=sum(num_tracks), total_albums=sum(num_albums))
-
-#flextable(table) %>% theme_vanilla()
-
 # Se clona la lista de canciones (playlist) para propositos de visualizacion
 data_summary <- playlists[, c("collaborative", "num_tracks", "num_albums", "num_followers")]
 data_summary$collaborative <- ifelse(data_summary$collaborative, "Public", "Private")
 summary <- data_summary %>% summarizor(by = c("collaborative"), overall_label = "Total") 
 summary_table <- summary %>% as_flextable(spread_first_col = TRUE)
-#set_
-#sumarizor_table <- set_header_labels(summary_table, values = list(
-#  collaborative: "Public/Private"
-#))
 summary_table
 ```
-# Histograma de frecuencia por Numero de Canciones
+
+### Distribucion de Listas de Reproduccion
 
 ```{r}
 library(tidyverse)
@@ -219,12 +172,22 @@ library(viridis)
 library(magrittr)
 library(ggplot2)
 library(dplyr)
+library(flextable)
 
 playlists <- read.csv("data/playlists.csv")
 
-playlists %>% ggplot( aes(x=num_albums, fill=collaborative)) + geom_histogram( color="#e9ecef", alpha=0.6, position = 'identity') + scale_fill_manual(values=c("#69b3a2", "#404080")) + theme_ipsum() + labs(fill="")
+#p_bygroup <- playlists %>% group_by(collaborative) %>% summarise(mnum_tracks=mean(num_tracks))
+#playlists_by_group %>%  ggplot( aes(x=collaborative, y=mnum_tracks, fill=collaborative)) + geom_boxplot()
+
+p_bygroup <- playlists[, c("collaborative", "num_tracks")]
+p_bygroup$collaborative <- ifelse(p_bygroup$collaborative, "Public", "Private")
+p_bygroup %>%  ggplot( aes(x=collaborative, y=num_tracks, fill=collaborative)) + geom_boxplot()
+p_bygroup
+
 ```
+
 ## El Artista Mas Escuchado
+
 ```{r}
 library(wordcloud2)
 library(readr)
@@ -251,12 +214,6 @@ wc_tracks <- dtracks %>% group_by(album_name) %>% summarise(n = n_distinct(track
 wordcloud2(data = wc_tracks, size = 2)
 ```
 
-## Including Plots
+## Conclusiones
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Se puede apreciar información relevante sobre el análisis exploratorio. La mayoría de las listas de reproducción son privadas, en comparación con las listas de reproducción pública. Esto refuerza la idea inicial de que al crear un modelo basado en listas de reproducción (Contenido generado por usuario) podría llevar a aumentar la satisfacción en la experiencia de los usuarios de las plataformas de música en línea. Los artistas y álbumes más escuchados podrían utilizarse como características del modelo de recomendación de música automática. En buena medida reflejan la relación que existe entre los usuarios dueños de sus listas de reproducción y sus preferencias musicales.
