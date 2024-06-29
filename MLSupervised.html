@@ -1,0 +1,6915 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Quarto Basics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="MLSupervised_files/libs/clipboard/clipboard.min.js"></script>
+<script src="MLSupervised_files/libs/quarto-html/quarto.js"></script>
+<script src="MLSupervised_files/libs/quarto-html/popper.min.js"></script>
+<script src="MLSupervised_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="MLSupervised_files/libs/quarto-html/anchor.min.js"></script>
+<link href="MLSupervised_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="MLSupervised_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="MLSupervised_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="MLSupervised_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="MLSupervised_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Quarto Basics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="cell-1" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="24">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">'tidyr'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">'reshape2'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"./"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-2" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"./datasets/accidents.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-3" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 238522 × 24</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">DATE</th>
+<th data-quarto-table-cell-role="th" scope="col">TIME</th>
+<th data-quarto-table-cell-role="th" scope="col">BOROUGH</th>
+<th data-quarto-table-cell-role="th" scope="col">ZIP.CODE</th>
+<th data-quarto-table-cell-role="th" scope="col">LATITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">LONGITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">ON.STREET.NAME</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.KILLED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.CYCLIST.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">COLLISION_ID</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.1</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.5</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>09/26/2018</td>
+<td>12:12</td>
+<td>BRONX</td>
+<td>10454.0</td>
+<td>40.808987</td>
+<td>-73.911316</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3988123</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/25/2018</td>
+<td>16:30</td>
+<td>BROOKLYN</td>
+<td>11236.0</td>
+<td>40.636005</td>
+<td>-73.91251</td>
+<td>FLATLANDS AVENUE</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3987962</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/22/2019</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11101.0</td>
+<td>40.75549</td>
+<td>-73.93953</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4193132</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/23/2018</td>
+<td>13:10</td>
+<td>QUEENS</td>
+<td>11367.0</td>
+<td></td>
+<td></td>
+<td>MAIN STREET</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985962</td>
+<td>Bike</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/20/2019</td>
+<td>22:40</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.868336</td>
+<td>-73.90127</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4192111</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/20/2019</td>
+<td>7:15</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191802</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/19/2019</td>
+<td>12:00</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.669327</td>
+<td>-73.73533</td>
+<td>241 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191196</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/22/2018</td>
+<td>11:25</td>
+<td>BRONX</td>
+<td>10465.0</td>
+<td>40.836227</td>
+<td>-73.82292</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4004118</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>09/22/2018</td>
+<td>15:56</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td>40.819297999999996</td>
+<td>-73.92188</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985745</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/18/2019</td>
+<td>12:43</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td></td>
+<td></td>
+<td>EAST 149 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191092</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/18/2019</td>
+<td>16:45</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.728953999999995</td>
+<td>-73.847565</td>
+<td>67 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190455</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/17/2019</td>
+<td>13:11</td>
+<td>BRONX</td>
+<td>10466.0</td>
+<td></td>
+<td></td>
+<td>SCHIEFELIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190717</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/16/2019</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.711548</td>
+<td>-73.95353</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190764</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/20/2018</td>
+<td>17:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td></td>
+<td></td>
+<td>Dekalb ave</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984687</td>
+<td>Sedan</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>09/20/2018</td>
+<td>1:40</td>
+<td>BRONX</td>
+<td>10459.0</td>
+<td>40.825947</td>
+<td>-73.88784</td>
+<td>LONGFELLOW AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984408</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/19/2018</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.722621999999994</td>
+<td>-73.849144</td>
+<td>YELLOWSTONE BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Following Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984060</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>09/19/2018</td>
+<td>8:30</td>
+<td>MANHATTAN</td>
+<td>10036.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984325</td>
+<td>Bus</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/18/2018</td>
+<td>10:37</td>
+<td>BROOKLYN</td>
+<td>11226.0</td>
+<td>40.639927</td>
+<td>-73.94939000000001</td>
+<td>NEWKIRK AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983284</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>09/18/2018</td>
+<td>15:30</td>
+<td>BROOKLYN</td>
+<td>11209.0</td>
+<td>40.62149</td>
+<td>-74.02622</td>
+<td>86 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983654</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/12/2019</td>
+<td>8:30</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.86593</td>
+<td>-73.90286</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4187375</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/11/2019</td>
+<td>0:07</td>
+<td>MANHATTAN</td>
+<td>10010.0</td>
+<td>40.73855</td>
+<td>-73.98043</td>
+<td>EAST 24 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Oversized Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186702</td>
+<td>Sedan</td>
+<td>Van</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/16/2018</td>
+<td>5:30</td>
+<td>BROOKLYN</td>
+<td>11217.0</td>
+<td></td>
+<td></td>
+<td>FLATBUSH AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981311</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>09/15/2018</td>
+<td>16:16</td>
+<td>BROOKLYN</td>
+<td>11223.0</td>
+<td>40.59217</td>
+<td>-73.968636</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981971</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/15/2018</td>
+<td>19:15</td>
+<td>BRONX</td>
+<td>10461.0</td>
+<td>40.843727</td>
+<td>-73.82754</td>
+<td>JARVIS AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981526</td>
+<td>ELECT</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/10/2019</td>
+<td>22:00</td>
+<td>BRONX</td>
+<td>10458.0</td>
+<td></td>
+<td></td>
+<td>EAST FORDHAM ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186687</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/10/2019</td>
+<td>23:28</td>
+<td>QUEENS</td>
+<td>11372.0</td>
+<td>40.753082</td>
+<td>-73.88399</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186524</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/10/2019</td>
+<td>3:00</td>
+<td>BROOKLYN</td>
+<td>11219.0</td>
+<td>40.630577</td>
+<td>-74.00751</td>
+<td>64 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186063</td>
+<td>Taxi</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>08/09/2019</td>
+<td>0:45</td>
+<td>BRONX</td>
+<td>10457.0</td>
+<td>40.851032000000004</td>
+<td>-73.90173</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185779</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>08/09/2019</td>
+<td>10:50</td>
+<td>MANHATTAN</td>
+<td>10027.0</td>
+<td>40.80559</td>
+<td>-73.94828000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185798</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>09/14/2018</td>
+<td>15:16</td>
+<td>BROOKLYN</td>
+<td>11234.0</td>
+<td>40.618652000000004</td>
+<td>-73.9317</td>
+<td>AVENUE N</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3982523</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>01/15/2018</td>
+<td>16:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td>40.77064</td>
+<td>-73.82658</td>
+<td>31 ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3829364</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/27/2018</td>
+<td>15:15</td>
+<td>BROOKLYN</td>
+<td>11210.0</td>
+<td>40.636086</td>
+<td>-73.95091</td>
+<td>FARRAGUT ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836656</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/05/2018</td>
+<td>19:20</td>
+<td>QUEENS</td>
+<td>11413.0</td>
+<td>40.676693</td>
+<td>-73.74221</td>
+<td>MERRICK BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Traffic Control Disregarded</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822961</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>02/01/2018</td>
+<td>14:45</td>
+<td>QUEENS</td>
+<td>11432.0</td>
+<td>40.71175</td>
+<td>-73.80079</td>
+<td>164 STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3839717</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/12/2018</td>
+<td>12:26</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.667126</td>
+<td>-73.86704</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3859143</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/01/2018</td>
+<td>20:45</td>
+<td>QUEENS</td>
+<td>11691.0</td>
+<td>40.59853</td>
+<td>-73.74620999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821007</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/26/2018</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11368.0</td>
+<td>40.750609999999995</td>
+<td>-73.85873000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835244</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>BICYCLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/10/2018</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td>40.68969</td>
+<td>-73.99237</td>
+<td>COURT STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828292</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/02/2018</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.68227</td>
+<td>-73.73236999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td>Unspecified</td>
+<td>Unspecified</td>
+<td></td>
+<td>3821315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/09/2018</td>
+<td>12:15</td>
+<td>MANHATTAN</td>
+<td>10029.0</td>
+<td>40.790366999999996</td>
+<td>-73.949776</td>
+<td>EAST 102 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826998</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/26/2018</td>
+<td>18:00</td>
+<td>STATEN ISLAND</td>
+<td>10306.0</td>
+<td>40.564537</td>
+<td>-74.13171</td>
+<td>AMBOY ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Traffic Control Disregarded</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835233</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/10/2018</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11434.0</td>
+<td>40.659397</td>
+<td>-73.773384</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826287</td>
+<td>TK</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/16/2018</td>
+<td>19:45</td>
+<td>QUEENS</td>
+<td>11106.0</td>
+<td>40.76197</td>
+<td>-73.92539000000001</td>
+<td>BROADWAY</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3830068</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/21/2018</td>
+<td>0:58</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.861256</td>
+<td>-73.86272</td>
+<td>WARING AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832720</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/06/2018</td>
+<td>6:30</td>
+<td>QUEENS</td>
+<td>11370.0</td>
+<td>40.755835999999995</td>
+<td>-73.89299</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3823388</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/29/2018</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11385.0</td>
+<td>40.71158</td>
+<td>-73.90131</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836896</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/26/2018</td>
+<td>11:20</td>
+<td>MANHATTAN</td>
+<td>10019.0</td>
+<td>40.762062</td>
+<td>-73.98363499999999</td>
+<td>WEST 51 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837829</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/11/2018</td>
+<td>18:40</td>
+<td>BROOKLYN</td>
+<td>11225.0</td>
+<td>40.659405</td>
+<td>-73.96263</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826386</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>02/01/2018</td>
+<td>17:50</td>
+<td>BROOKLYN</td>
+<td>11207.0</td>
+<td>40.685513</td>
+<td>-73.90841999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3838554</td>
+<td>PASSENGER VEHICLE</td>
+<td>BU</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/12/2018</td>
+<td>8:00</td>
+<td>BRONX</td>
+<td>10460.0</td>
+<td>40.84183</td>
+<td>-73.88389000000001</td>
+<td>EAST TREMONT AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828938</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/17/2018</td>
+<td>23:20</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.871376</td>
+<td>-73.86334000000001</td>
+<td>BURKE AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3831778</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/27/2018</td>
+<td>18:30</td>
+<td>BROOKLYN</td>
+<td>11214.0</td>
+<td>40.6073</td>
+<td>-74.00108</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835759</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/25/2018</td>
+<td>13:00</td>
+<td>BRONX</td>
+<td>10470.0</td>
+<td>40.906384</td>
+<td>-73.85167</td>
+<td>EAST 242 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836368</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/11/2018</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.721363000000004</td>
+<td>-73.84808000000001</td>
+<td>AUSTIN STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826674</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/03/2018</td>
+<td>17:40</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.67086</td>
+<td>-73.87424</td>
+<td>FOUNTAIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821922</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/20/2018</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11436.0</td>
+<td>40.685356</td>
+<td>-73.79723</td>
+<td>LINDEN BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832275</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/04/2018</td>
+<td>14:00</td>
+<td>BRONX</td>
+<td>10452.0</td>
+<td>40.84518</td>
+<td>-73.91417</td>
+<td>JEROME AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/20/2018</td>
+<td>13:05</td>
+<td>BRONX</td>
+<td>10462.0</td>
+<td>40.83121</td>
+<td>-73.850876</td>
+<td>CASTLE HILL AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832513</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>01/29/2018</td>
+<td>17:45</td>
+<td>QUEENS</td>
+<td>11377.0</td>
+<td>40.75725</td>
+<td>-73.904854</td>
+<td>31 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837608</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>01/23/2018</td>
+<td>16:38</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.710196999999994</td>
+<td>-73.95843</td>
+<td>HAVEMEYER STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing or Lane Usage Improper</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3833631</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-4" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>DATE <span class="ot">&lt;-</span> <span class="fu">as.Date.character</span>(d<span class="sc">$</span>DATE, <span class="st">"%m/%d/%Y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-5" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 238522 × 24</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">DATE</th>
+<th data-quarto-table-cell-role="th" scope="col">TIME</th>
+<th data-quarto-table-cell-role="th" scope="col">BOROUGH</th>
+<th data-quarto-table-cell-role="th" scope="col">ZIP.CODE</th>
+<th data-quarto-table-cell-role="th" scope="col">LATITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">LONGITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">ON.STREET.NAME</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.KILLED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.CYCLIST.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">COLLISION_ID</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.1</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.5</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2018-09-26</td>
+<td>12:12</td>
+<td>BRONX</td>
+<td>10454.0</td>
+<td>40.808987</td>
+<td>-73.911316</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3988123</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-25</td>
+<td>16:30</td>
+<td>BROOKLYN</td>
+<td>11236.0</td>
+<td>40.636005</td>
+<td>-73.91251</td>
+<td>FLATLANDS AVENUE</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3987962</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-22</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11101.0</td>
+<td>40.75549</td>
+<td>-73.93953</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4193132</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-23</td>
+<td>13:10</td>
+<td>QUEENS</td>
+<td>11367.0</td>
+<td></td>
+<td></td>
+<td>MAIN STREET</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985962</td>
+<td>Bike</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-20</td>
+<td>22:40</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.868336</td>
+<td>-73.90127</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4192111</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-20</td>
+<td>7:15</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191802</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-19</td>
+<td>12:00</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.669327</td>
+<td>-73.73533</td>
+<td>241 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191196</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-22</td>
+<td>11:25</td>
+<td>BRONX</td>
+<td>10465.0</td>
+<td>40.836227</td>
+<td>-73.82292</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4004118</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-09-22</td>
+<td>15:56</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td>40.819297999999996</td>
+<td>-73.92188</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985745</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-18</td>
+<td>12:43</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td></td>
+<td></td>
+<td>EAST 149 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191092</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-18</td>
+<td>16:45</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.728953999999995</td>
+<td>-73.847565</td>
+<td>67 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190455</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-17</td>
+<td>13:11</td>
+<td>BRONX</td>
+<td>10466.0</td>
+<td></td>
+<td></td>
+<td>SCHIEFELIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190717</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-16</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.711548</td>
+<td>-73.95353</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190764</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-20</td>
+<td>17:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td></td>
+<td></td>
+<td>Dekalb ave</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984687</td>
+<td>Sedan</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-09-20</td>
+<td>1:40</td>
+<td>BRONX</td>
+<td>10459.0</td>
+<td>40.825947</td>
+<td>-73.88784</td>
+<td>LONGFELLOW AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984408</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-19</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.722621999999994</td>
+<td>-73.849144</td>
+<td>YELLOWSTONE BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Following Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984060</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-09-19</td>
+<td>8:30</td>
+<td>MANHATTAN</td>
+<td>10036.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984325</td>
+<td>Bus</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-18</td>
+<td>10:37</td>
+<td>BROOKLYN</td>
+<td>11226.0</td>
+<td>40.639927</td>
+<td>-73.94939000000001</td>
+<td>NEWKIRK AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983284</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-09-18</td>
+<td>15:30</td>
+<td>BROOKLYN</td>
+<td>11209.0</td>
+<td>40.62149</td>
+<td>-74.02622</td>
+<td>86 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983654</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-12</td>
+<td>8:30</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.86593</td>
+<td>-73.90286</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4187375</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-11</td>
+<td>0:07</td>
+<td>MANHATTAN</td>
+<td>10010.0</td>
+<td>40.73855</td>
+<td>-73.98043</td>
+<td>EAST 24 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Oversized Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186702</td>
+<td>Sedan</td>
+<td>Van</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-16</td>
+<td>5:30</td>
+<td>BROOKLYN</td>
+<td>11217.0</td>
+<td></td>
+<td></td>
+<td>FLATBUSH AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981311</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-09-15</td>
+<td>16:16</td>
+<td>BROOKLYN</td>
+<td>11223.0</td>
+<td>40.59217</td>
+<td>-73.968636</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981971</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-15</td>
+<td>19:15</td>
+<td>BRONX</td>
+<td>10461.0</td>
+<td>40.843727</td>
+<td>-73.82754</td>
+<td>JARVIS AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981526</td>
+<td>ELECT</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>22:00</td>
+<td>BRONX</td>
+<td>10458.0</td>
+<td></td>
+<td></td>
+<td>EAST FORDHAM ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186687</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-10</td>
+<td>23:28</td>
+<td>QUEENS</td>
+<td>11372.0</td>
+<td>40.753082</td>
+<td>-73.88399</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186524</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>3:00</td>
+<td>BROOKLYN</td>
+<td>11219.0</td>
+<td>40.630577</td>
+<td>-74.00751</td>
+<td>64 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186063</td>
+<td>Taxi</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2019-08-09</td>
+<td>0:45</td>
+<td>BRONX</td>
+<td>10457.0</td>
+<td>40.851032000000004</td>
+<td>-73.90173</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185779</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2019-08-09</td>
+<td>10:50</td>
+<td>MANHATTAN</td>
+<td>10027.0</td>
+<td>40.80559</td>
+<td>-73.94828000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185798</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-09-14</td>
+<td>15:16</td>
+<td>BROOKLYN</td>
+<td>11234.0</td>
+<td>40.618652000000004</td>
+<td>-73.9317</td>
+<td>AVENUE N</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3982523</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>2018-01-15</td>
+<td>16:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td>40.77064</td>
+<td>-73.82658</td>
+<td>31 ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3829364</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>15:15</td>
+<td>BROOKLYN</td>
+<td>11210.0</td>
+<td>40.636086</td>
+<td>-73.95091</td>
+<td>FARRAGUT ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836656</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-05</td>
+<td>19:20</td>
+<td>QUEENS</td>
+<td>11413.0</td>
+<td>40.676693</td>
+<td>-73.74221</td>
+<td>MERRICK BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Traffic Control Disregarded</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822961</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-02-01</td>
+<td>14:45</td>
+<td>QUEENS</td>
+<td>11432.0</td>
+<td>40.71175</td>
+<td>-73.80079</td>
+<td>164 STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3839717</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-12</td>
+<td>12:26</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.667126</td>
+<td>-73.86704</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3859143</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-01</td>
+<td>20:45</td>
+<td>QUEENS</td>
+<td>11691.0</td>
+<td>40.59853</td>
+<td>-73.74620999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821007</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11368.0</td>
+<td>40.750609999999995</td>
+<td>-73.85873000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835244</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>BICYCLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td>40.68969</td>
+<td>-73.99237</td>
+<td>COURT STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828292</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-02</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.68227</td>
+<td>-73.73236999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td>Unspecified</td>
+<td>Unspecified</td>
+<td></td>
+<td>3821315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-09</td>
+<td>12:15</td>
+<td>MANHATTAN</td>
+<td>10029.0</td>
+<td>40.790366999999996</td>
+<td>-73.949776</td>
+<td>EAST 102 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826998</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>18:00</td>
+<td>STATEN ISLAND</td>
+<td>10306.0</td>
+<td>40.564537</td>
+<td>-74.13171</td>
+<td>AMBOY ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Traffic Control Disregarded</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835233</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11434.0</td>
+<td>40.659397</td>
+<td>-73.773384</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826287</td>
+<td>TK</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-16</td>
+<td>19:45</td>
+<td>QUEENS</td>
+<td>11106.0</td>
+<td>40.76197</td>
+<td>-73.92539000000001</td>
+<td>BROADWAY</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3830068</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-21</td>
+<td>0:58</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.861256</td>
+<td>-73.86272</td>
+<td>WARING AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832720</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-06</td>
+<td>6:30</td>
+<td>QUEENS</td>
+<td>11370.0</td>
+<td>40.755835999999995</td>
+<td>-73.89299</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3823388</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-29</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11385.0</td>
+<td>40.71158</td>
+<td>-73.90131</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836896</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>11:20</td>
+<td>MANHATTAN</td>
+<td>10019.0</td>
+<td>40.762062</td>
+<td>-73.98363499999999</td>
+<td>WEST 51 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837829</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>18:40</td>
+<td>BROOKLYN</td>
+<td>11225.0</td>
+<td>40.659405</td>
+<td>-73.96263</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826386</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-02-01</td>
+<td>17:50</td>
+<td>BROOKLYN</td>
+<td>11207.0</td>
+<td>40.685513</td>
+<td>-73.90841999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing Too Closely</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3838554</td>
+<td>PASSENGER VEHICLE</td>
+<td>BU</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-12</td>
+<td>8:00</td>
+<td>BRONX</td>
+<td>10460.0</td>
+<td>40.84183</td>
+<td>-73.88389000000001</td>
+<td>EAST TREMONT AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828938</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-17</td>
+<td>23:20</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.871376</td>
+<td>-73.86334000000001</td>
+<td>BURKE AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3831778</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>18:30</td>
+<td>BROOKLYN</td>
+<td>11214.0</td>
+<td>40.6073</td>
+<td>-74.00108</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835759</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-25</td>
+<td>13:00</td>
+<td>BRONX</td>
+<td>10470.0</td>
+<td>40.906384</td>
+<td>-73.85167</td>
+<td>EAST 242 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836368</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.721363000000004</td>
+<td>-73.84808000000001</td>
+<td>AUSTIN STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826674</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-03</td>
+<td>17:40</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.67086</td>
+<td>-73.87424</td>
+<td>FOUNTAIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821922</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11436.0</td>
+<td>40.685356</td>
+<td>-73.79723</td>
+<td>LINDEN BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832275</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-04</td>
+<td>14:00</td>
+<td>BRONX</td>
+<td>10452.0</td>
+<td>40.84518</td>
+<td>-73.91417</td>
+<td>JEROME AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>13:05</td>
+<td>BRONX</td>
+<td>10462.0</td>
+<td>40.83121</td>
+<td>-73.850876</td>
+<td>CASTLE HILL AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832513</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2018-01-29</td>
+<td>17:45</td>
+<td>QUEENS</td>
+<td>11377.0</td>
+<td>40.75725</td>
+<td>-73.904854</td>
+<td>31 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837608</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2018-01-23</td>
+<td>16:38</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.710196999999994</td>
+<td>-73.95843</td>
+<td>HAVEMEYER STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Passing or Lane Usage Improper</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3833631</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-6" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>M.Y <span class="ot">&lt;-</span> <span class="fu">strftime</span>(d<span class="sc">$</span>DATE, <span class="st">"%y-%m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-7" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 238522 × 25</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">DATE</th>
+<th data-quarto-table-cell-role="th" scope="col">TIME</th>
+<th data-quarto-table-cell-role="th" scope="col">BOROUGH</th>
+<th data-quarto-table-cell-role="th" scope="col">ZIP.CODE</th>
+<th data-quarto-table-cell-role="th" scope="col">LATITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">LONGITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">ON.STREET.NAME</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.KILLED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.CYCLIST.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">COLLISION_ID</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.1</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">M.Y</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2018-09-26</td>
+<td>12:12</td>
+<td>BRONX</td>
+<td>10454.0</td>
+<td>40.808987</td>
+<td>-73.911316</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3988123</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2018-09-25</td>
+<td>16:30</td>
+<td>BROOKLYN</td>
+<td>11236.0</td>
+<td>40.636005</td>
+<td>-73.91251</td>
+<td>FLATLANDS AVENUE</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3987962</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2019-08-22</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11101.0</td>
+<td>40.75549</td>
+<td>-73.93953</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4193132</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2018-09-23</td>
+<td>13:10</td>
+<td>QUEENS</td>
+<td>11367.0</td>
+<td></td>
+<td></td>
+<td>MAIN STREET</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985962</td>
+<td>Bike</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2019-08-20</td>
+<td>22:40</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.868336</td>
+<td>-73.90127</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4192111</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2019-08-20</td>
+<td>7:15</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191802</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-19</td>
+<td>12:00</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.669327</td>
+<td>-73.73533</td>
+<td>241 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191196</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2018-09-22</td>
+<td>11:25</td>
+<td>BRONX</td>
+<td>10465.0</td>
+<td>40.836227</td>
+<td>-73.82292</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4004118</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2018-09-22</td>
+<td>15:56</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td>40.819297999999996</td>
+<td>-73.92188</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3985745</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2019-08-18</td>
+<td>12:43</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td></td>
+<td></td>
+<td>EAST 149 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4191092</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-18</td>
+<td>16:45</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.728953999999995</td>
+<td>-73.847565</td>
+<td>67 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190455</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2019-08-17</td>
+<td>13:11</td>
+<td>BRONX</td>
+<td>10466.0</td>
+<td></td>
+<td></td>
+<td>SCHIEFELIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190717</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-16</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.711548</td>
+<td>-73.95353</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4190764</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2018-09-20</td>
+<td>17:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td></td>
+<td></td>
+<td>Dekalb ave</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984687</td>
+<td>Sedan</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2018-09-20</td>
+<td>1:40</td>
+<td>BRONX</td>
+<td>10459.0</td>
+<td>40.825947</td>
+<td>-73.88784</td>
+<td>LONGFELLOW AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984408</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2018-09-19</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.722621999999994</td>
+<td>-73.849144</td>
+<td>YELLOWSTONE BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984060</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2018-09-19</td>
+<td>8:30</td>
+<td>MANHATTAN</td>
+<td>10036.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3984325</td>
+<td>Bus</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2018-09-18</td>
+<td>10:37</td>
+<td>BROOKLYN</td>
+<td>11226.0</td>
+<td>40.639927</td>
+<td>-73.94939000000001</td>
+<td>NEWKIRK AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983284</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2018-09-18</td>
+<td>15:30</td>
+<td>BROOKLYN</td>
+<td>11209.0</td>
+<td>40.62149</td>
+<td>-74.02622</td>
+<td>86 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3983654</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2019-08-12</td>
+<td>8:30</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.86593</td>
+<td>-73.90286</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4187375</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-11</td>
+<td>0:07</td>
+<td>MANHATTAN</td>
+<td>10010.0</td>
+<td>40.73855</td>
+<td>-73.98043</td>
+<td>EAST 24 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186702</td>
+<td>Sedan</td>
+<td>Van</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2018-09-16</td>
+<td>5:30</td>
+<td>BROOKLYN</td>
+<td>11217.0</td>
+<td></td>
+<td></td>
+<td>FLATBUSH AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981311</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2018-09-15</td>
+<td>16:16</td>
+<td>BROOKLYN</td>
+<td>11223.0</td>
+<td>40.59217</td>
+<td>-73.968636</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981971</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="even">
+<td>2018-09-15</td>
+<td>19:15</td>
+<td>BRONX</td>
+<td>10461.0</td>
+<td>40.843727</td>
+<td>-73.82754</td>
+<td>JARVIS AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3981526</td>
+<td>ELECT</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>22:00</td>
+<td>BRONX</td>
+<td>10458.0</td>
+<td></td>
+<td></td>
+<td>EAST FORDHAM ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186687</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2019-08-10</td>
+<td>23:28</td>
+<td>QUEENS</td>
+<td>11372.0</td>
+<td>40.753082</td>
+<td>-73.88399</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186524</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>3:00</td>
+<td>BROOKLYN</td>
+<td>11219.0</td>
+<td>40.630577</td>
+<td>-74.00751</td>
+<td>64 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4186063</td>
+<td>Taxi</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2019-08-09</td>
+<td>0:45</td>
+<td>BRONX</td>
+<td>10457.0</td>
+<td>40.851032000000004</td>
+<td>-73.90173</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185779</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-09</td>
+<td>10:50</td>
+<td>MANHATTAN</td>
+<td>10027.0</td>
+<td>40.80559</td>
+<td>-73.94828000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4185798</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+</tr>
+<tr class="even">
+<td>2018-09-14</td>
+<td>15:16</td>
+<td>BROOKLYN</td>
+<td>11234.0</td>
+<td>40.618652000000004</td>
+<td>-73.9317</td>
+<td>AVENUE N</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3982523</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>2018-01-15</td>
+<td>16:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td>40.77064</td>
+<td>-73.82658</td>
+<td>31 ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3829364</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>15:15</td>
+<td>BROOKLYN</td>
+<td>11210.0</td>
+<td>40.636086</td>
+<td>-73.95091</td>
+<td>FARRAGUT ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836656</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-05</td>
+<td>19:20</td>
+<td>QUEENS</td>
+<td>11413.0</td>
+<td>40.676693</td>
+<td>-73.74221</td>
+<td>MERRICK BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822961</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-02-01</td>
+<td>14:45</td>
+<td>QUEENS</td>
+<td>11432.0</td>
+<td>40.71175</td>
+<td>-73.80079</td>
+<td>164 STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3839717</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-02</td>
+</tr>
+<tr class="even">
+<td>2018-01-12</td>
+<td>12:26</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.667126</td>
+<td>-73.86704</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3859143</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-01</td>
+<td>20:45</td>
+<td>QUEENS</td>
+<td>11691.0</td>
+<td>40.59853</td>
+<td>-73.74620999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821007</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11368.0</td>
+<td>40.750609999999995</td>
+<td>-73.85873000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835244</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>BICYCLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>10:30</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td>40.68969</td>
+<td>-73.99237</td>
+<td>COURT STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828292</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-02</td>
+<td>8:30</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.68227</td>
+<td>-73.73236999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td>Unspecified</td>
+<td></td>
+<td>3821315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-09</td>
+<td>12:15</td>
+<td>MANHATTAN</td>
+<td>10029.0</td>
+<td>40.790366999999996</td>
+<td>-73.949776</td>
+<td>EAST 102 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826998</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>18:00</td>
+<td>STATEN ISLAND</td>
+<td>10306.0</td>
+<td>40.564537</td>
+<td>-74.13171</td>
+<td>AMBOY ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835233</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11434.0</td>
+<td>40.659397</td>
+<td>-73.773384</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826287</td>
+<td>TK</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-16</td>
+<td>19:45</td>
+<td>QUEENS</td>
+<td>11106.0</td>
+<td>40.76197</td>
+<td>-73.92539000000001</td>
+<td>BROADWAY</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3830068</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-21</td>
+<td>0:58</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.861256</td>
+<td>-73.86272</td>
+<td>WARING AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832720</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-06</td>
+<td>6:30</td>
+<td>QUEENS</td>
+<td>11370.0</td>
+<td>40.755835999999995</td>
+<td>-73.89299</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3823388</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-29</td>
+<td>14:30</td>
+<td>QUEENS</td>
+<td>11385.0</td>
+<td>40.71158</td>
+<td>-73.90131</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836896</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>11:20</td>
+<td>MANHATTAN</td>
+<td>10019.0</td>
+<td>40.762062</td>
+<td>-73.98363499999999</td>
+<td>WEST 51 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837829</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>18:40</td>
+<td>BROOKLYN</td>
+<td>11225.0</td>
+<td>40.659405</td>
+<td>-73.96263</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826386</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-02-01</td>
+<td>17:50</td>
+<td>BROOKLYN</td>
+<td>11207.0</td>
+<td>40.685513</td>
+<td>-73.90841999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3838554</td>
+<td>PASSENGER VEHICLE</td>
+<td>BU</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-02</td>
+</tr>
+<tr class="odd">
+<td>2018-01-12</td>
+<td>8:00</td>
+<td>BRONX</td>
+<td>10460.0</td>
+<td>40.84183</td>
+<td>-73.88389000000001</td>
+<td>EAST TREMONT AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3828938</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-17</td>
+<td>23:20</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.871376</td>
+<td>-73.86334000000001</td>
+<td>BURKE AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3831778</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>18:30</td>
+<td>BROOKLYN</td>
+<td>11214.0</td>
+<td>40.6073</td>
+<td>-74.00108</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3835759</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-25</td>
+<td>13:00</td>
+<td>BRONX</td>
+<td>10470.0</td>
+<td>40.906384</td>
+<td>-73.85167</td>
+<td>EAST 242 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3836368</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>19:30</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.721363000000004</td>
+<td>-73.84808000000001</td>
+<td>AUSTIN STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3826674</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-03</td>
+<td>17:40</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.67086</td>
+<td>-73.87424</td>
+<td>FOUNTAIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3821922</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>15:00</td>
+<td>QUEENS</td>
+<td>11436.0</td>
+<td>40.685356</td>
+<td>-73.79723</td>
+<td>LINDEN BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832275</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-04</td>
+<td>14:00</td>
+<td>BRONX</td>
+<td>10452.0</td>
+<td>40.84518</td>
+<td>-73.91417</td>
+<td>JEROME AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3822315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>13:05</td>
+<td>BRONX</td>
+<td>10462.0</td>
+<td>40.83121</td>
+<td>-73.850876</td>
+<td>CASTLE HILL AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3832513</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="even">
+<td>2018-01-29</td>
+<td>17:45</td>
+<td>QUEENS</td>
+<td>11377.0</td>
+<td>40.75725</td>
+<td>-73.904854</td>
+<td>31 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3837608</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+<tr class="odd">
+<td>2018-01-23</td>
+<td>16:38</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.710196999999994</td>
+<td>-73.95843</td>
+<td>HAVEMEYER STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3833631</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-8" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="39">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(M.Y) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>M.Y, <span class="at">y=</span>n, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Mes"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# Accidentes"</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MLSupervised_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-9" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="41">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>TIME <span class="ot">&lt;-</span> <span class="fu">strptime</span>(d<span class="sc">$</span>TIME, <span class="st">"%H:%M"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-10" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="44">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>T <span class="ot">&lt;-</span> <span class="fu">strftime</span>(d<span class="sc">$</span>TIME, <span class="st">"%H"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-11" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="45">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 238522 × 26</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">DATE</th>
+<th data-quarto-table-cell-role="th" scope="col">TIME</th>
+<th data-quarto-table-cell-role="th" scope="col">BOROUGH</th>
+<th data-quarto-table-cell-role="th" scope="col">ZIP.CODE</th>
+<th data-quarto-table-cell-role="th" scope="col">LATITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">LONGITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">ON.STREET.NAME</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.KILLED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.CYCLIST.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">COLLISION_ID</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.1</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">M.Y</th>
+<th data-quarto-table-cell-role="th" scope="col">T</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2018-09-26</td>
+<td>2024-06-28 12:12:00</td>
+<td>BRONX</td>
+<td>10454.0</td>
+<td>40.808987</td>
+<td>-73.911316</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3988123</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>2018-09-25</td>
+<td>2024-06-28 16:30:00</td>
+<td>BROOKLYN</td>
+<td>11236.0</td>
+<td>40.636005</td>
+<td>-73.91251</td>
+<td>FLATLANDS AVENUE</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3987962</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>2019-08-22</td>
+<td>2024-06-28 19:30:00</td>
+<td>QUEENS</td>
+<td>11101.0</td>
+<td>40.75549</td>
+<td>-73.93953</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4193132</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td>2018-09-23</td>
+<td>2024-06-28 13:10:00</td>
+<td>QUEENS</td>
+<td>11367.0</td>
+<td></td>
+<td></td>
+<td>MAIN STREET</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3985962</td>
+<td>Bike</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>2019-08-20</td>
+<td>2024-06-28 22:40:00</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.868336</td>
+<td>-73.90127</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4192111</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>2019-08-20</td>
+<td>2024-06-28 07:15:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4191802</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>07</td>
+</tr>
+<tr class="odd">
+<td>2019-08-19</td>
+<td>2024-06-28 12:00:00</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.669327</td>
+<td>-73.73533</td>
+<td>241 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4191196</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>2018-09-22</td>
+<td>2024-06-28 11:25:00</td>
+<td>BRONX</td>
+<td>10465.0</td>
+<td>40.836227</td>
+<td>-73.82292</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4004118</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>2018-09-22</td>
+<td>2024-06-28 15:56:00</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td>40.819297999999996</td>
+<td>-73.92188</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3985745</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>2019-08-18</td>
+<td>2024-06-28 12:43:00</td>
+<td>BRONX</td>
+<td>10451.0</td>
+<td></td>
+<td></td>
+<td>EAST 149 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4191092</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>2019-08-18</td>
+<td>2024-06-28 16:45:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.728953999999995</td>
+<td>-73.847565</td>
+<td>67 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4190455</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>2019-08-17</td>
+<td>2024-06-28 13:11:00</td>
+<td>BRONX</td>
+<td>10466.0</td>
+<td></td>
+<td></td>
+<td>SCHIEFELIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4190717</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>2019-08-16</td>
+<td>2024-06-28 10:30:00</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.711548</td>
+<td>-73.95353</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4190764</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>2018-09-20</td>
+<td>2024-06-28 17:30:00</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td></td>
+<td></td>
+<td>Dekalb ave</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3984687</td>
+<td>Sedan</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>2018-09-20</td>
+<td>2024-06-28 01:40:00</td>
+<td>BRONX</td>
+<td>10459.0</td>
+<td>40.825947</td>
+<td>-73.88784</td>
+<td>LONGFELLOW AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3984408</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>01</td>
+</tr>
+<tr class="even">
+<td>2018-09-19</td>
+<td>2024-06-28 15:00:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.722621999999994</td>
+<td>-73.849144</td>
+<td>YELLOWSTONE BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3984060</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>2018-09-19</td>
+<td>2024-06-28 08:30:00</td>
+<td>MANHATTAN</td>
+<td>10036.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3984325</td>
+<td>Bus</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>08</td>
+</tr>
+<tr class="even">
+<td>2018-09-18</td>
+<td>2024-06-28 10:37:00</td>
+<td>BROOKLYN</td>
+<td>11226.0</td>
+<td>40.639927</td>
+<td>-73.94939000000001</td>
+<td>NEWKIRK AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3983284</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>2018-09-18</td>
+<td>2024-06-28 15:30:00</td>
+<td>BROOKLYN</td>
+<td>11209.0</td>
+<td>40.62149</td>
+<td>-74.02622</td>
+<td>86 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3983654</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>2019-08-12</td>
+<td>2024-06-28 08:30:00</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.86593</td>
+<td>-73.90286</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4187375</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>08</td>
+</tr>
+<tr class="odd">
+<td>2019-08-11</td>
+<td>2024-06-28 00:07:00</td>
+<td>MANHATTAN</td>
+<td>10010.0</td>
+<td>40.73855</td>
+<td>-73.98043</td>
+<td>EAST 24 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4186702</td>
+<td>Sedan</td>
+<td>Van</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>00</td>
+</tr>
+<tr class="even">
+<td>2018-09-16</td>
+<td>2024-06-28 05:30:00</td>
+<td>BROOKLYN</td>
+<td>11217.0</td>
+<td></td>
+<td></td>
+<td>FLATBUSH AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3981311</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>05</td>
+</tr>
+<tr class="odd">
+<td>2018-09-15</td>
+<td>2024-06-28 16:16:00</td>
+<td>BROOKLYN</td>
+<td>11223.0</td>
+<td>40.59217</td>
+<td>-73.968636</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3981971</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>2018-09-15</td>
+<td>2024-06-28 19:15:00</td>
+<td>BRONX</td>
+<td>10461.0</td>
+<td>40.843727</td>
+<td>-73.82754</td>
+<td>JARVIS AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3981526</td>
+<td>ELECT</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>2024-06-28 22:00:00</td>
+<td>BRONX</td>
+<td>10458.0</td>
+<td></td>
+<td></td>
+<td>EAST FORDHAM ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4186687</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>2019-08-10</td>
+<td>2024-06-28 23:28:00</td>
+<td>QUEENS</td>
+<td>11372.0</td>
+<td>40.753082</td>
+<td>-73.88399</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4186524</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td>2019-08-10</td>
+<td>2024-06-28 03:00:00</td>
+<td>BROOKLYN</td>
+<td>11219.0</td>
+<td>40.630577</td>
+<td>-74.00751</td>
+<td>64 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4186063</td>
+<td>Taxi</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>03</td>
+</tr>
+<tr class="even">
+<td>2019-08-09</td>
+<td>2024-06-28 00:45:00</td>
+<td>BRONX</td>
+<td>10457.0</td>
+<td>40.851032000000004</td>
+<td>-73.90173</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4185779</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>00</td>
+</tr>
+<tr class="odd">
+<td>2019-08-09</td>
+<td>2024-06-28 10:50:00</td>
+<td>MANHATTAN</td>
+<td>10027.0</td>
+<td>40.80559</td>
+<td>-73.94828000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>4185798</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>2018-09-14</td>
+<td>2024-06-28 15:16:00</td>
+<td>BROOKLYN</td>
+<td>11234.0</td>
+<td>40.618652000000004</td>
+<td>-73.9317</td>
+<td>AVENUE N</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3982523</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>2018-01-15</td>
+<td>2024-06-28 16:00:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td>40.77064</td>
+<td>-73.82658</td>
+<td>31 ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3829364</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>2024-06-28 15:15:00</td>
+<td>BROOKLYN</td>
+<td>11210.0</td>
+<td>40.636086</td>
+<td>-73.95091</td>
+<td>FARRAGUT ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3836656</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>2018-01-05</td>
+<td>2024-06-28 19:20:00</td>
+<td>QUEENS</td>
+<td>11413.0</td>
+<td>40.676693</td>
+<td>-73.74221</td>
+<td>MERRICK BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3822961</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>2018-02-01</td>
+<td>2024-06-28 14:45:00</td>
+<td>QUEENS</td>
+<td>11432.0</td>
+<td>40.71175</td>
+<td>-73.80079</td>
+<td>164 STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3839717</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-02</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>2018-01-12</td>
+<td>2024-06-28 12:26:00</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.667126</td>
+<td>-73.86704</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3859143</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>2018-01-01</td>
+<td>2024-06-28 20:45:00</td>
+<td>QUEENS</td>
+<td>11691.0</td>
+<td>40.59853</td>
+<td>-73.74620999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3821007</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>2024-06-28 08:30:00</td>
+<td>QUEENS</td>
+<td>11368.0</td>
+<td>40.750609999999995</td>
+<td>-73.85873000000001</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3835244</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>BICYCLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>08</td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>2024-06-28 10:30:00</td>
+<td>BROOKLYN</td>
+<td>11201.0</td>
+<td>40.68969</td>
+<td>-73.99237</td>
+<td>COURT STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3828292</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>2018-01-02</td>
+<td>2024-06-28 08:30:00</td>
+<td>QUEENS</td>
+<td>11422.0</td>
+<td>40.68227</td>
+<td>-73.73236999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td>Unspecified</td>
+<td></td>
+<td>3821315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td>18-01</td>
+<td>08</td>
+</tr>
+<tr class="odd">
+<td>2018-01-09</td>
+<td>2024-06-28 12:15:00</td>
+<td>MANHATTAN</td>
+<td>10029.0</td>
+<td>40.790366999999996</td>
+<td>-73.949776</td>
+<td>EAST 102 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3826998</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>2024-06-28 18:00:00</td>
+<td>STATEN ISLAND</td>
+<td>10306.0</td>
+<td>40.564537</td>
+<td>-74.13171</td>
+<td>AMBOY ROAD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3835233</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td>2018-01-10</td>
+<td>2024-06-28 14:30:00</td>
+<td>QUEENS</td>
+<td>11434.0</td>
+<td>40.659397</td>
+<td>-73.773384</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3826287</td>
+<td>TK</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>2018-01-16</td>
+<td>2024-06-28 19:45:00</td>
+<td>QUEENS</td>
+<td>11106.0</td>
+<td>40.76197</td>
+<td>-73.92539000000001</td>
+<td>BROADWAY</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3830068</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>2018-01-21</td>
+<td>2024-06-28 00:58:00</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.861256</td>
+<td>-73.86272</td>
+<td>WARING AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3832720</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>00</td>
+</tr>
+<tr class="even">
+<td>2018-01-06</td>
+<td>2024-06-28 06:30:00</td>
+<td>QUEENS</td>
+<td>11370.0</td>
+<td>40.755835999999995</td>
+<td>-73.89299</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3823388</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>06</td>
+</tr>
+<tr class="odd">
+<td>2018-01-29</td>
+<td>2024-06-28 14:30:00</td>
+<td>QUEENS</td>
+<td>11385.0</td>
+<td>40.71158</td>
+<td>-73.90131</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3836896</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PICK-UP TRUCK</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>2018-01-26</td>
+<td>2024-06-28 11:20:00</td>
+<td>MANHATTAN</td>
+<td>10019.0</td>
+<td>40.762062</td>
+<td>-73.98363499999999</td>
+<td>WEST 51 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3837829</td>
+<td>PASSENGER VEHICLE</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>2024-06-28 18:40:00</td>
+<td>BROOKLYN</td>
+<td>11225.0</td>
+<td>40.659405</td>
+<td>-73.96263</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3826386</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>18</td>
+</tr>
+<tr class="even">
+<td>2018-02-01</td>
+<td>2024-06-28 17:50:00</td>
+<td>BROOKLYN</td>
+<td>11207.0</td>
+<td>40.685513</td>
+<td>-73.90841999999999</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3838554</td>
+<td>PASSENGER VEHICLE</td>
+<td>BU</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-02</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>2018-01-12</td>
+<td>2024-06-28 08:00:00</td>
+<td>BRONX</td>
+<td>10460.0</td>
+<td>40.84183</td>
+<td>-73.88389000000001</td>
+<td>EAST TREMONT AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3828938</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>TAXI</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>08</td>
+</tr>
+<tr class="even">
+<td>2018-01-17</td>
+<td>2024-06-28 23:20:00</td>
+<td>BRONX</td>
+<td>10467.0</td>
+<td>40.871376</td>
+<td>-73.86334000000001</td>
+<td>BURKE AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3831778</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td>2018-01-27</td>
+<td>2024-06-28 18:30:00</td>
+<td>BROOKLYN</td>
+<td>11214.0</td>
+<td>40.6073</td>
+<td>-74.00108</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3835759</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>18</td>
+</tr>
+<tr class="even">
+<td>2018-01-25</td>
+<td>2024-06-28 13:00:00</td>
+<td>BRONX</td>
+<td>10470.0</td>
+<td>40.906384</td>
+<td>-73.85167</td>
+<td>EAST 242 STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3836368</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>2018-01-11</td>
+<td>2024-06-28 19:30:00</td>
+<td>QUEENS</td>
+<td>11375.0</td>
+<td>40.721363000000004</td>
+<td>-73.84808000000001</td>
+<td>AUSTIN STREET</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3826674</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td>2018-01-03</td>
+<td>2024-06-28 17:40:00</td>
+<td>BROOKLYN</td>
+<td>11208.0</td>
+<td>40.67086</td>
+<td>-73.87424</td>
+<td>FOUNTAIN AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3821922</td>
+<td>PASSENGER VEHICLE</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>2024-06-28 15:00:00</td>
+<td>QUEENS</td>
+<td>11436.0</td>
+<td>40.685356</td>
+<td>-73.79723</td>
+<td>LINDEN BOULEVARD</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3832275</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>2018-01-04</td>
+<td>2024-06-28 14:00:00</td>
+<td>BRONX</td>
+<td>10452.0</td>
+<td>40.84518</td>
+<td>-73.91417</td>
+<td>JEROME AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3822315</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td>2018-01-20</td>
+<td>2024-06-28 13:05:00</td>
+<td>BRONX</td>
+<td>10462.0</td>
+<td>40.83121</td>
+<td>-73.850876</td>
+<td>CASTLE HILL AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3832513</td>
+<td>PASSENGER VEHICLE</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td>2018-01-29</td>
+<td>2024-06-28 17:45:00</td>
+<td>QUEENS</td>
+<td>11377.0</td>
+<td>40.75725</td>
+<td>-73.904854</td>
+<td>31 AVENUE</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3837608</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>PASSENGER VEHICLE</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>2018-01-23</td>
+<td>2024-06-28 16:38:00</td>
+<td>BROOKLYN</td>
+<td>11211.0</td>
+<td>40.710196999999994</td>
+<td>-73.95843</td>
+<td>HAVEMEYER STREET</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td></td>
+<td>3833631</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td>SPORT UTILITY / STATION WAGON</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-01</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-12" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="53">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(T) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>T, <span class="at">y=</span>n, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Hora"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# Accidentes"</span>) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MLSupervised_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="55">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(T) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>T, <span class="at">y=</span>n, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Hora"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# Accidentes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MLSupervised_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-14" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="60">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>D <span class="ot">&lt;-</span> <span class="fu">weekdays</span>(d<span class="sc">$</span>DATE)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>D <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-15" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="61">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 27</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">DATE</th>
+<th data-quarto-table-cell-role="th" scope="col">TIME</th>
+<th data-quarto-table-cell-role="th" scope="col">BOROUGH</th>
+<th data-quarto-table-cell-role="th" scope="col">ZIP.CODE</th>
+<th data-quarto-table-cell-role="th" scope="col">LATITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">LONGITUDE</th>
+<th data-quarto-table-cell-role="th" scope="col">ON.STREET.NAME</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.PEDESTRIANS.KILLED</th>
+<th data-quarto-table-cell-role="th" scope="col">NUMBER.OF.CYCLIST.INJURED</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">CONTRIBUTING.FACTOR.VEHICLE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">COLLISION_ID</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.1</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.2</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.3</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.4</th>
+<th data-quarto-table-cell-role="th" scope="col">VEHICLE.TYPE.CODE.5</th>
+<th data-quarto-table-cell-role="th" scope="col">M.Y</th>
+<th data-quarto-table-cell-role="th" scope="col">T</th>
+<th data-quarto-table-cell-role="th" scope="col">D</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2018-09-26</td>
+<td>2024-06-28 12:12:00</td>
+<td>BRONX</td>
+<td>10454.0</td>
+<td>40.808987</td>
+<td>-73.911316</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td>3988123</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>12</td>
+<td>Wednesday</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2018-09-25</td>
+<td>2024-06-28 16:30:00</td>
+<td>BROOKLYN</td>
+<td>11236.0</td>
+<td>40.636005</td>
+<td>-73.91251</td>
+<td>FLATLANDS AVENUE</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td>3987962</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>16</td>
+<td>Tuesday</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2019-08-22</td>
+<td>2024-06-28 19:30:00</td>
+<td>QUEENS</td>
+<td>11101.0</td>
+<td>40.75549</td>
+<td>-73.93953</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td>4193132</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>19</td>
+<td>Thursday</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2018-09-23</td>
+<td>2024-06-28 13:10:00</td>
+<td>QUEENS</td>
+<td>11367.0</td>
+<td></td>
+<td></td>
+<td>MAIN STREET</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>⋯</td>
+<td></td>
+<td>3985962</td>
+<td>Bike</td>
+<td>Station Wagon/Sport Utility Vehicle</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18-09</td>
+<td>13</td>
+<td>Sunday</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2019-08-20</td>
+<td>2024-06-28 22:40:00</td>
+<td>BRONX</td>
+<td>10468.0</td>
+<td>40.868336</td>
+<td>-73.90127</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td>4192111</td>
+<td>Sedan</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>22</td>
+<td>Tuesday</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2019-08-20</td>
+<td>2024-06-28 07:15:00</td>
+<td>QUEENS</td>
+<td>11354.0</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>⋯</td>
+<td></td>
+<td>4191802</td>
+<td>Sedan</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>19-08</td>
+<td>07</td>
+<td>Tuesday</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-16" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="70">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(D) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 7 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">D</th>
+<th data-quarto-table-cell-role="th" scope="col">n</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Friday</td>
+<td>37886</td>
+</tr>
+<tr class="even">
+<td>Monday</td>
+<td>34719</td>
+</tr>
+<tr class="odd">
+<td>Saturday</td>
+<td>31784</td>
+</tr>
+<tr class="even">
+<td>Sunday</td>
+<td>27040</td>
+</tr>
+<tr class="odd">
+<td>Thursday</td>
+<td>36254</td>
+</tr>
+<tr class="even">
+<td>Tuesday</td>
+<td>35651</td>
+</tr>
+<tr class="odd">
+<td>Wednesday</td>
+<td>35188</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-17" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="65">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(D) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(D) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>D, <span class="at">y=</span>n, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Dia"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# Accidentes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MLSupervised_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-18" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="72">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">count</span>(BOROUGH) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>BOROUGH, <span class="at">y=</span>n, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Vencindario"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"# Accidentes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MLSupervised_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-19" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="75">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"./datasets/borough_data.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-20" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="76">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 5 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">borough</th>
+<th data-quarto-table-cell-role="th" scope="col">population</th>
+<th data-quarto-table-cell-role="th" scope="col">area</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the bronx</td>
+<td>1471160</td>
+<td>42.1</td>
+</tr>
+<tr class="even">
+<td>brooklyn</td>
+<td>2648771</td>
+<td>70.82</td>
+</tr>
+<tr class="odd">
+<td>manhattan</td>
+<td>1664727</td>
+<td>22.83</td>
+</tr>
+<tr class="even">
+<td>queens</td>
+<td>2358582</td>
+<td>108.53</td>
+</tr>
+<tr class="odd">
+<td>staten island</td>
+<td>479458</td>
+<td>58.37</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-21" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="78">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f<span class="sc">$</span>borough <span class="ot">&lt;-</span> <span class="fu">toupper</span>(f<span class="sc">$</span>borough)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-22" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="79">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 5 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">borough</th>
+<th data-quarto-table-cell-role="th" scope="col">population</th>
+<th data-quarto-table-cell-role="th" scope="col">area</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>THE BRONX</td>
+<td>1471160</td>
+<td>42.1</td>
+</tr>
+<tr class="even">
+<td>BROOKLYN</td>
+<td>2648771</td>
+<td>70.82</td>
+</tr>
+<tr class="odd">
+<td>MANHATTAN</td>
+<td>1664727</td>
+<td>22.83</td>
+</tr>
+<tr class="even">
+<td>QUEENS</td>
+<td>2358582</td>
+<td>108.53</td>
+</tr>
+<tr class="odd">
+<td>STATEN ISLAND</td>
+<td>479458</td>
+<td>58.37</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cell-23" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="82">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f<span class="sc">$</span>borough[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"BRONX"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-24" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="83">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 5 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">borough</th>
+<th data-quarto-table-cell-role="th" scope="col">population</th>
+<th data-quarto-table-cell-role="th" scope="col">area</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BRONX</td>
+<td>1471160</td>
+<td>42.1</td>
+</tr>
+<tr class="even">
+<td>BROOKLYN</td>
+<td>2648771</td>
+<td>70.82</td>
+</tr>
+<tr class="odd">
+<td>MANHATTAN</td>
+<td>1664727</td>
+<td>22.83</td>
+</tr>
+<tr class="even">
+<td>QUEENS</td>
+<td>2358582</td>
+<td>108.53</td>
+</tr>
+<tr class="odd">
+<td>STATEN ISLAND</td>
+<td>479458</td>
+<td>58.37</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

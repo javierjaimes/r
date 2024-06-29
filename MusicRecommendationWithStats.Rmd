@@ -1,0 +1,67 @@
+---
+title: "Selección automática de la siguiente canción, basada en las listas de reproducción del servicio de música en línea: Spotify."
+date: "2024-06-07"
+author:
+  - Javier Eduardo Jaimes Velasquez^[Politécnico Grancolombiano, jajaimes4@poligran.edu.co]
+  - Paula Nathalia Pineda Ortiz^[Politécnico Grancolombiano, papineda1@poligran.edu.co]
+  - Brandon Valencia Murillo^[Politécnico Grancolombiano, brvalencia6@poligran.edu.co]
+  - Johan Alejandro Cifuentes Gonzalez^[Politécnico Grancolombiano, jcifuntes@poligran.edu.co]
+  - Melvin Damar Pineda Cañon^[Politécnico Grancolombiano, mdpineda1@poligran.edu.co]
+bibliography: references.bib
+always_allow_html: true
+abstract: |
+  Las plataformas de música en línea deben emplear una forma eficiente y eficaz que resuelve uno de los problemas más críticos, recomendación de música automática. En este documento se explora uno de tantos métodos expuestos en la actualidad para resolver la tarea. Se espera poder evaluar su funcionamiento respecto a otros y también su efectividad a la hora de resolver el problema.
+output:  
+  bookdown::word_document2:
+    toc: true
+    number_sections: true
+    reference_docx: "plantilla_LF.docx"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dpi=2000,warning=F, message = F,comment = "")
+```
+
+
+# Introducción
+
+Las canciones se volvieron parte de cotidianidad, y por ellos los servicios de música en línea juegan un papel importante en la vida de cada ciudadano. Los consumidores de música ya no necesitan un dispositivo de propósito dedicado, como el radio. Ahora la música está disponible en una computadora, o en las manos a través de un smartphone.
+
+Las plataformas de música en línea son numerosas, según @Wikipedia. Parte fundamental de estas plataformas es el algoritmo de recomendacion de canciones en automatico. Es decir, la capacidad del sistema de seleccionar la siguiente cancion, siguiendo a algun criterio como el demografico, o tal vez el objeto de estudio de este artico, el contenido musical de una lista de reproduccion creada los usuarios. Como se menciona en *@7823674*: *“Un entendimiento profundo de los atributos de las listas de reproducción y como los usuarios crean y mantienen dichas listas puede contribuir de manera natural a mejores recomendaciones y personalizaciones”*. ste algoritmo puede ser la diferencia ante la competencia.
+
+
+Luego es de interes del articulop present, poder desarrollar un analisis sobre los algoritmos de recomendacion de canciones guiado por la siguiente pregunta: ¿Cómo puede un algoritmo de recomendación de música basado en aprendizaje automático mejorar la precisión y personalización de las sugerencias de canciones en plataformas de streaming?
+
+De acuerdo con @Bazzara2019EscucharSA, "El algoritmo de recomendación de Spotify utiliza una combinación de técnicas de filtrado colaborativo, análisis de contenido y datos demográficos, lo que permite generar recomendaciones de música más precisas y personalizadas para cada usuario". En terminos parroquiales, Spotify tiene en cuanto las preferencias musicales de usuarios similares, del contenido de cada cancion en terminos de las siguientes variables: *danceability*, *energy*, *accoustic*, entre otros y los datos demograficos com edad, genero y ubicacion geografica.
+
+Para un analisis mas detallado se podrian explorar otras hipotesis ademas de la ya planteada como •	¿Qué ponderación se da a cada técnica en el proceso completo de recomendación?, •	¿Cómo afecta cada componente de las canciones al índice de satisfacción del usuario?, y ¿De qué manera se actualiza y mejora el algoritmo en función de los nuevos datos recopilados?
+
+
+# Descripcion del Conjunto de Datos
+
+Se obtuvo acceso al conjunto de datos [Million Playlist Dataset](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge) publicado por Spotify en la plataforma de [AI Crowd](https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge). A partir del dataset original se toma como muestra poblacional de 1000 listas de reproduccion comprendidas de 34444 canciones.
+
+
+Como parte del analisis exploratorio fue necesario extraer por cada cancion los siguientes caracteristicas del audio:
+
+| Caracteristico de Audio | Tipo De Columna | Descripción
+|:-----------------|:---------------|:-----------
+|danceability |Real, entre $0$ y $1$ |Describe el atributo de baile de una cancion.
+|energy |Real, entre $0$ y $1$  | Describe en terminos de intensidad y actividad una cancion.
+|loudness |Real, entre $-60$ y $0$ |Volumen de la cancion en decibeles (dB)
+|speechiness |Real, entre $-60$ y $0$ |Describe la presencia de palabras en una cancion
+|acousticness |Real, entre $0$ y $1$  |Describe si una cancion es en version acustica.
+|instrumentalness |Real, entre $0$ y $1$ |Describe si una cancion no contiene voces.
+|liveness |Rea, entre $0$ y $1$ |Describe si hay presencia de audiencia en una cancion.
+|tempo |Real |Describe el actual BPM de una cancion.
+|valence |Real,  entre $0$ y $1$ |Describe la positividad musical que transmite una pista.
+|mode |Entero, $0$, $1$ |Indica el tono de la cancion.
+
+Se pudo observar que el $99.7%$ de los datos fueron obtenidos a traves del [API de Spotify](https://developer.spotify.com/) para las canciones y para los demas valores perdidos fueron imputados siguiendo el metodo del valor mas frecuente. Ademas de lo anterior fue necesario obtener siguiendo el mismo metodo el valor de *genero musical* por cada uno de los artistas presentes en el conjunto de datos.
+
+En la tabla se puede observar que la mayoria de canciones pertenecen a los generos, pop, rap, rock y algunos de sus vertientes, de parte de los atributos de las canciones se calculan la media, la media absoluta de la desviacion y el coeficiente de variance con lo cual se decide descartar el atributo de *loudness* debido a su nivel de variacion, ademas de que el volumen de las canciones no es un elemento determinante.
+
+
+See comparan las variables caracteristicas de las canciones con los 4 generos mas sonados para entender su relacion. Se puede evidenciar valores atipicos para los atributos de *acousticness* y *energy*.
+
+
