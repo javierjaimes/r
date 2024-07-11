@@ -1,0 +1,142 @@
+---
+title: "Actividad - Metodo Supervisados"
+author:
+  - Javier Eduardo Jaimes Velasquez^[Politécnico Grancolombiano, jajaimes4@poligran.edu.co]
+  - Brandon Valencia Murillo^[Politécnico Grancolombiano, brvalencia6@poligran.edu.co]
+bibliography: references.bib
+always_allow_html: true
+output:
+  bookdown::word_document2:
+      toc: true
+      number_sections: true
+      reference_docx: "plantilla_LF.docx"
+date: "2024-07-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Actividad Metodos Supervisados
+
+
+A continuacion se detalla a manera de informer las actividades solicitadas como parte del modulo de metodos supervisados. En el siguiento documento se busca dar una respuesta a las siguientes preguntas:
+
+* Manipulacion y carga del conjunto de datos *attrition*, parte de la libreria *modeldata*.
+* Definir un modelo de Random Forest. (RF) a partir de la columna *attrition.
+* Definir un modelo GLM, a partir del modelo y conjuntos de datos anterior mencionado.
+* Definir un modelo Supervised Vector Machine (SVM) a partir del modulo y conjuntos de datos anterior mencionado.
+* A partir de lo anterior: Cual modelo seria el mejor?
+* Obtener las matriz de confusion de cada modelo.
+
+## Requerimientos iniciales
+
+Se cargan las librerias necesarias: *magrittr, factoextra, readr, tidyverse, caret, class, modeldata, glmnet, ranger y naivebayes*.
+
+
+```{r}
+library(caret)
+library(class)
+library(modeldata)
+library(glmnet)
+library(ranger)
+library(tidyverse)
+```
+
+## Conjunto de Datos
+
+A continuacion se describe el conjunto de datos, **attrition**:
+
+```{r}
+data("attrition")
+```
+
+Al resumir los datos, validaremos que la columna *Attrition* sea de tipo factor:
+
+```{r}
+str(attrition)
+```
+
+## Definicion de Modelos
+
+A continuacion se definen los siguientes modelos: RF, GLM y SVM.
+
+```{r}
+set.seed(100)
+
+trabajadores <- attrition %>% select(-c()) %>% mutate(Attrition = as.factor(Attrition))
+
+# Se establece una particion de los datos, para definir los dos conjuntos el de prueba y el de entrenamiento
+index_trabajadores <- createDataPartition(y = trabajadores$Attrition, p = 0.7, list = F)
+
+# Se definen los conjuntos de prueba y de entrenamiento
+trabajadores_train <- trabajadores[index_trabajadores, ]
+trabajadores_test <- trabajadores[-index_trabajadores, ]
+
+ # Se establecen los grupos que mantienen el balance de los mismos durante la definicion y prueba de los modelos.
+trabajadores_fold <- createFolds(trabajadores_train$Attrition, k = 5)
+
+# Se crea el control de entrenamiento, definiendo el parametro index igual a los folds previamenmte creados
+trabajadores_ctrl <- trainControl(savePredictions = T, classProbs = T, summaryFunction = twoClassSummary, index = trabajadores_fold)
+
+#### Modelo GML ####
+trabajadores_glm_model <- train(Attrition ~ ., trabajadores_train, metric = "ROC", method = "glmnet", trControl = trabajadores_ctrl)
+
+
+#### RF ####
+trabajadores_rf_model <- train(Attrition ~ ., trabajadores_train, metric = "ROC", method = "ranger", trControl = trabajadores_ctrl)
+
+#### SVM ####
+trabajadores_svm_model <- train(Attrition ~ ., trabajadores_train, metric = "ROC", method = "svmRadial", tuneLength = 10, trControl = trabajadores_ctrl)
+```
+
+
+## Comparacion de Modelos
+
+Ahora es momento de graficar los modelos para su debida comparacion:
+
+
+```{r}
+list_ml <- list(
+  glmnet = trabajadores_glm_model,
+  rf = trabajadores_rf_model,
+  svm = trabajadores_svm_model
+)
+
+
+comparacion_modelos <- resamples(list_ml)
+bwplot(comparacion_modelos, metric = "ROC")
+```
+
+### Matrix de Confuision por Modelo
+
+A continuacion se imprimen las matrices de confusion por cada uno de los modelos
+
+#### Random Forest
+
+En este modelo vemos una precision de $0.8568$ con una desecersion de clientes del $71$.
+
+```{r}
+confusionMatrix(predict(object = trabajadores_rf_model, newdata = trabajadores_test), trabajadores_test$Attrition)   
+```
+
+#### GLM
+
+En este modelo vemos una precision de $0.8705$ con una desecersion de clientes del $71$.
+
+```{r}
+confusionMatrix(predict(object = trabajadores_glm_model, newdata = trabajadores_test), trabajadores_test$Attrition)   
+```
+
+#### SVM
+
+En este modelo vemos una precision de $0.8659$ con una desecersion de clientes del $71$.
+
+```{r}
+confusionMatrix(predict(object = trabajadores_svm_model, newdata = trabajadores_test), trabajadores_test$Attrition)   
+```
+
+## Conclusion
+
+Los modelos se comportan de forma muy similar, y su varianza en la precision es muy poco haciendo que cualquier de los modelos encajaria para la solucion y entendimiento del problema. Tal vez se deberian integrar otras variables para determinar la eleccion, varibles que varian de acuerdo al contexto en el cual se ejecutaran estos modelos.
+

@@ -1,0 +1,145 @@
+---
+title: "ModelosNoSupervisado-ActividadFacebook"
+author:
+  - Javier Eduardo Jaimes Velasquez^[Politécnico Grancolombiano, jajaimes4@poligran.edu.co]
+  - Brandon Valencia Murillo^[Politécnico Grancolombiano, brvalencia6@poligran.edu.co]
+bibliography: references.bib
+always_allow_html: true
+output:
+  bookdown::word_document2:
+      toc: true
+      number_sections: true
+      reference_docx: "plantilla_LF.docx"
+date: "2024-07-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Modelos No Supervisados - Actividad en Facebook
+
+Hay situacion en donde el interes es encontrar patrones a nivel grupal mas alla de lo individual, y es el caso que se estudiara a lo largo del libro.
+
+Es importante recordar que:
+
+- las tareas de agrupamiento, difieren un poco de las tareas de clasificacion.
+- el algoritmo de agrupamiento objeto de estudio es el llamado *kmeans*.
+
+## Entiendo el agrupamiento no supervisado.
+
+Este de algoritmo es de caracter no supervisado, en donde automaticamente se definen grupos (*clusters*) de elementos similares.
+Es claro que estos grupos no se han definido previamente por tal razon estos algoritmos son escenciales a la hora de descubrir patrones, mas alla de hacer predicciones.
+
+El principio principal de agrupamiento se basa en que los elementos de un grupo deben ser tan similares como se pueda de los demas pero muy diferente del resto, es decir que en terminos de definicion de similiradidad la distancia puede ser un elemento clave.
+
+### Algunos ejemplos de criterios de similaridad
+
+- Agrupamiento por caracteristicas socio-demograficas.
+- Patrones de Comportamiento  de uso de un sistema, comportamiento de compra en una plataforma de ventas.
+- Tan simple como por columnas de un dataset con valores similares.
+
+
+## El modelo de agrupamiento
+
+A diferencia de los modelos de prediccion, los modelos de agrupamiento buscan crear nuevos datos a partir de la logica definidad de agrupamiento, pero en resumen el proceso no difiere de a mucho, excepto de que al super no supervisado implica que los datos se agrupan siguiendo por ejemplo heuristicas definidas para ello.
+
+```{r}
+library(magrittr)
+library(factoextra)
+library(corrplot)
+library(flextable)
+library(readr)
+library(tidyverse)
+```
+
+### Descripcion del conjunto de datos
+
+
+
+```{r}
+fb_activity <- read.csv2("./datasets/Live_20210128.csv", sep = ",", header = T)
+```
+
+Ahora se realiza un poco de limpieza sobre el conjunto de los datos:
+
+```{r}
+fb_activity <- fb_activity %>% select(-c("status_type", "status_id", "status_published", "Column1", "Column2", "Column3", "Column4"))
+```
+
+```{r cars}
+fb_activity %>% summarizor %>% as_flextable(spread_first_col = F)
+```
+
+#### Variables duplicadas
+
+Es importante determinar si algunas variables estan corelacionadas entre si, esto para dejarlas por fuera de nuestro modelo de agrupamiento:
+
+```{r}
+corrplot(cor(fb_activity), type = "upper", method = "ellipse", tl.cex = 0.9)
+```
+
+Entiendo que, la variable *num_reactions* y *num_likes*, tienen un coeficiente de corelacion de 1, haria sentido que al menos una de ella no fuera parte de nuestro modelo. Antes de eliminarlas del todo, se procede a verificar su nivel de dispersion por medio de un grafico de variacion:
+
+```{r}
+fb_activity %>% ggplot() + aes(x = num_reactions, y =num_likes) + geom_point()
+```
+
+Al comprobarse la corelacion de forma grafica procedemos a limpiar la variable de nuestro conjunto datos:
+
+```{r}
+fb_activity <- fb_activity[, -1]
+```
+
+En el siguiente paso, estandarizemos los valores siguiendo el modelo *z-score*. En este proceso se buscan que todas las caracteristicas sean llevadas en una escala siguiendo el llamandom del metodo *scale* de R, en dicho caso la media sera de $0$ y la desviacion estandar de $1$:
+
+```{r}
+fb_activity_zs <-  as.data.frame(scale(fb_activity))
+```
+
+
+## K-means, como funciona.
+
+Por lo general lo algoritmos de agrupamiento se pueden dividir en dos grupos, los basados en una metrica de distancia o los basado en un funcion de agrupamiento. Y a su vez podemos tambien clasificarlos dependiendo del metodo, los basadois en metodos jerarquicos, los basados en particiones y lo basados densidad. K-means esta basado en particiones, entre sus ventajas estan>
+
+- Principios basicos que son de facil entendimiento.
+- Altamente configurabble, adaptable para acomodarse a diversas situaciones.
+- Su desempeno es bueno bajo la mayoria de situaciones de la vida real.
+
+Entre sus desventajas:
+- No tan sofisticado como algunos de los otros metodos.
+- No tiene garantia de seleccion en situacion optima de agrupamiento.
+- Requiere esfuerzos en la eleccion del numero $k$, de clusters.
+- Y no es ideal para ciertos cosas como aquellos donde la alta variacion en la densidad del modelo es clave.
+
+En simples terminos: k-means assigna un numero determinado $n$  de observaciones a un numero $k$ de clusters, donde $k$ fue determinado con antelacion. El algoritmo usa un proceso de heuristicas para encontrar una solucion local optima, basicamente inicia con su mejor supocision y compara diferentes agrupamientos hasta llegar al supuesto "mejor".
+
+
+## Determinar k, numero de clusters.
+
+Empezaremos determinando el numero $k$ a partir del metodo del codo (*elbow*): aqui la idea es en como la homogeneidad y la heterogeneidad de los clusters cambia para diferentes valores de $k$:
+
+```{r}
+fviz_nbclust(x = fb_activity, FUNcluster = kmeans, method = "wss")
+```
+
+Dado lo anteorior, el numero $k$ debe ser igual a $2$., Con $k$ definido procedemos a crear el modelo utilizando el metodo *k-means* parte de la libreria *stats*:
+
+```{r}
+km_2 <- kmeans(x = fb_activity_zs, centers = 2)
+```
+
+Y asignamos al dataframe *fb_activity_zs* el cluster asignado a cada observacion:
+
+```{r}
+fb_activity_zs_agg <- fb_activity_zs %>% mutate(cluster_medias = km_2$cluster)
+```
+
+Por ultimo visualizacion la agrupacion creada por el metodo k-means:
+
+```{r}
+fviz_cluster(km_2, data = fb_activity, geom = "point", ellipse.type = "convex", ggtheme = theme_bw())
+```
+
+
+
